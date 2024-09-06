@@ -1,4 +1,4 @@
-from transactions.main.repositories.transactionrepo import TransactionRepository
+from app.apps.transactions.repositories.transactionrepo import TransactionRepository
 from django.db import transaction
 
 class TransactionService:
@@ -12,8 +12,8 @@ class TransactionService:
     - update_transaction(transaction, data) -> transaction
     """
 
-    @staticmethod
-    def __update_ancestor_transactions_total_amount(transaction, amount):
+    @classmethod
+    def __update_ancestor_transactions_total_amount(cls, transaction, amount):
         """Updates the total amount of ancestor transactions.
         
         Args:
@@ -36,20 +36,20 @@ class TransactionService:
             return
         TransactionRepository.bulk_update_transactions(parent_transactions, ["total_amount"])
 
-    @staticmethod
+    @classmethod
     @transaction.atomic
-    def create_transaction(data):
+    def create_transaction(cls, data):
         """Create a transaction."""
         # create a transaction
         transaction = TransactionRepository.create_transaction(**data)
         # update the total amount of ancestor transactions
         transaction_amount = data.get("amount")
-        TransactionService.__update_ancestor_transactions_total_amount(transaction, transaction_amount)
+        cls.__update_ancestor_transactions_total_amount(transaction, transaction_amount)
         return transaction
     
-    @staticmethod
+    @classmethod
     @transaction.atomic
-    def update_transaction(transaction, data):
+    def update_transaction(cls, transaction, data):
         """Updates a transaction."""
         current_amount = transaction.amount
         updated_amount = data.get("amount", current_amount) 
@@ -57,19 +57,19 @@ class TransactionService:
         # if the parent transaction is being updated
         if "parent_transaction" in data:
             # update the existing ancestors total amount
-            TransactionService.__update_ancestor_transactions_total_amount(transaction, -current_amount)
+            cls.__update_ancestor_transactions_total_amount(transaction, -current_amount)
             # update current transaction
             transaction = TransactionRepository.update_transaction(transaction, **data)
             # refresh objects from the database
             transaction.refresh_from_db()
             # update the new ancestors total amount
-            TransactionService.__update_ancestor_transactions_total_amount(transaction, transaction.amount)
+            cls.__update_ancestor_transactions_total_amount(transaction, transaction.amount)
             return transaction
         
         # update the transaction
         transaction = TransactionRepository.update_transaction(transaction, **data)
         # update the ancestors total amount
         if difference_in_amount:
-            TransactionService.__update_ancestor_transactions_total_amount(transaction, difference_in_amount)
+            cls.__update_ancestor_transactions_total_amount(transaction, difference_in_amount)
         
         return transaction

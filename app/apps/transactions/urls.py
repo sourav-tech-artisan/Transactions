@@ -1,4 +1,4 @@
-from transactions.main.views import TransactionViewSet
+from app.apps.transactions.views import TransactionViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()

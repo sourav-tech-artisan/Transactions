@@ -1,5 +1,5 @@
 from django_filters import rest_framework
-from transactions.main.repositories.transactionrepo import TransactionRepository
+from app.apps.transactions.repositories.transactionrepo import TransactionRepository
 
 
 class TransactionFilter(rest_framework.FilterSet):

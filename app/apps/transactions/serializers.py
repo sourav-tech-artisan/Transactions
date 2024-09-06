@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.core.validators import MinValueValidator
-from transactions.main.repositories.transactionrepo import TransactionRepository
+from app.apps.transactions.repositories.transactionrepo import TransactionRepository
 
 class DynamicFieldsSerializer(serializers.ModelSerializer):
     """

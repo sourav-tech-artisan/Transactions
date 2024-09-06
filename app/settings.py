@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 LIBS = ["rest_framework"]
 
-APPS = ["transactions.main"]
+APPS = ["app.apps.transactions"]
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'transactions.urls'
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
@@ -74,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'transactions.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Database

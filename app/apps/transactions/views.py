@@ -1,12 +1,12 @@
 from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from transactions.main.serializers import TransactionCreateSerializer, TransactionUpdateSerializer, TransactionReadSerializer
-from transactions.main.services.transaction_service import TransactionService
-from transactions.main.repositories.transactionrepo import TransactionRepository
-from transactions.main.filters import TransactionFilter
-from transactions.main.utils import filter_response_fields
-from transactions.main.pagination import StandardResultsSetPagination
+from app.apps.transactions.serializers import TransactionCreateSerializer, TransactionUpdateSerializer, TransactionReadSerializer
+from app.apps.transactions.services.transaction_service import TransactionService
+from app.apps.transactions.repositories.transactionrepo import TransactionRepository
+from app.apps.transactions.filters import TransactionFilter
+from app.apps.transactions.utils import filter_response_fields
+from app.apps.transactions.pagination import StandardResultsSetPagination
 
 
 class TransactionViewSet(viewsets.ModelViewSet):

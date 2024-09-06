@@ -1,5 +1,5 @@
 from django.contrib import admin
-from transactions.main.models import Transaction
+from app.apps.transactions.models import Transaction
 from django.contrib import admin
 
 # Register your models here.

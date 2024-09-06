@@ -1,4 +1,4 @@
-from transactions.main.models import Transaction
+from app.apps.transactions.models import Transaction
 
 class TransactionRepository:
     """Transaction repository
@@ -14,18 +14,18 @@ class TransactionRepository:
     - bulk_update_transactions(transactions, fields) -> None
     """
 
-    @staticmethod
-    def get_model():
+    @classmethod
+    def get_model(cls):
         """Get the model."""
         return Transaction
     
-    @staticmethod
-    def get_all_queryset():
+    @classmethod
+    def get_all_queryset(cls):
         """Get all transactions."""
         return Transaction.objects.all()
 
-    @staticmethod
-    def create_transaction(**fields):
+    @classmethod
+    def create_transaction(cls, **fields):
         """Create a transaction."""
         amount = fields.get("amount")
         transaction_type = fields.get("transaction_type")
@@ -34,8 +34,8 @@ class TransactionRepository:
         transaction = Transaction.objects.create(amount=amount, transaction_type=transaction_type, total_amount=total_amount, parent_transaction=parent_transaction)
         return transaction
     
-    @staticmethod
-    def update_transaction(transaction, **fields):
+    @classmethod
+    def update_transaction(cls, transaction, **fields):
         """Updates a transaction."""
         # update the transaction
         for field, value in fields.items():
@@ -43,12 +43,12 @@ class TransactionRepository:
         transaction.save()
         return transaction
 
-    @staticmethod
-    def get_transaction_by_id(transaction_id):
+    @classmethod
+    def get_transaction_by_id(cls, transaction_id):
         """Get a transaction by id."""
         return Transaction.objects.get(id=transaction_id)
     
-    @staticmethod
-    def bulk_update_transactions(transactions, fields):
+    @classmethod
+    def bulk_update_transactions(cls, transactions, fields):
         """Bulk update transactions."""
         Transaction.objects.bulk_update(transactions, fields)
