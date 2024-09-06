@@ -6,7 +6,7 @@ from app.apps.transactions.services.transaction_service import TransactionServic
 from app.apps.transactions.repositories.transactionrepo import TransactionRepository
 from app.apps.transactions.filters import TransactionFilter
 from app.apps.transactions.utils import filter_response_fields
-from app.apps.transactions.pagination import StandardResultsSetPagination
+from app.apps.base.pagination import StandardResultsSetPagination
 
 
 class TransactionViewSet(viewsets.ModelViewSet):

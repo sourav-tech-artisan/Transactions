@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 LIBS = ["rest_framework"]
 
-APPS = ["app.apps.transactions"]
+APPS = ["app.apps.transactions", "app.apps.base"]
 
 DJANGO_APPS = [
     'django.contrib.admin',

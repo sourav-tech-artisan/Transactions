@@ -1,17 +1,7 @@
 from django.db import models
-import uuid
+from app.apps.base.models import TimeStampedUUIDModel
 
 # Models are defined here
-
-class TimeStampedUUIDModel(models.Model):
-    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-
 class Transaction(TimeStampedUUIDModel):
     """Transaction model."""
     amount = models.DecimalField(max_digits=10, decimal_places=2)
