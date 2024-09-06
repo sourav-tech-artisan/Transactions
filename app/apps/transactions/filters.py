@@ -3,6 +3,7 @@ from app.apps.transactions.repositories.transactionrepo import TransactionReposi
 
 
 class TransactionFilter(rest_framework.FilterSet):
+    """Transaction filter class."""
     class Meta:
         model = TransactionRepository.get_model()
         fields = ("transaction_type",)

@@ -17,6 +17,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
 
     def get_serializer_class(self):
+        """Return serializer based on action."""
         if self.action == "create":
             return TransactionCreateSerializer
         if self.action == "partial_update":
@@ -25,6 +26,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
             return TransactionReadSerializer
 
     def create(self, request, *args, **kwargs):
+        """Create a new transaction."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
@@ -33,6 +35,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Response(data, status=201)
     
     def partial_update(self, request, *args, **kwargs):
+        """Update a transaction."""
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data, context={"instance": instance}, partial=True)
         serializer.is_valid(raise_exception=True)
@@ -42,12 +45,14 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Response(data, status=200)
     
     def retrieve(self, request, *args, **kwargs):
+        """Retrieve a transaction."""
         instance = self.get_object()
         fields = filter_response_fields(model=TransactionRepository.get_model(),request=request)
         data = self.get_serializer(instance, fields=fields).data
         return Response(data, status=200)
     
     def list(self, request, *args, **kwargs):
+        """List all transactions."""
         queryset = self.filter_queryset(self.get_queryset())
         fields = filter_response_fields(model=TransactionRepository.get_model(),request=request)
         # pagination

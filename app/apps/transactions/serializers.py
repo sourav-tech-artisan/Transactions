@@ -4,6 +4,7 @@ from app.apps.transactions.repositories.transactionrepo import TransactionReposi
 from app.apps.base.serializers import DynamicFieldsSerializer
 
 class TransactionCreateSerializer(serializers.ModelSerializer):
+    """Transaction create serializer."""
     amount = serializers.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)])
     transaction_type = serializers.CharField(max_length=50)
     parent_transaction = serializers.PrimaryKeyRelatedField(queryset=TransactionRepository.get_all_queryset(), required=False)

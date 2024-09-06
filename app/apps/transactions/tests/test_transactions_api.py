@@ -12,7 +12,7 @@ from fixtures.invalid_updation_data import INVALID_UPDATION_DATA
 
 class TransactionAPITestCase(APITestCase):
     def setUp(self):
-        # Create two test transaction
+        """Set up the test."""
         fields = {
             'amount': Decimal(100.00),
             'total_amount': Decimal(100.00),
@@ -62,6 +62,7 @@ class TransactionAPITestCase(APITestCase):
                 self.assertEqual(getattr(self.test_transaction, key), value)
 
     def test_amount_update_in_transaction(self):
+        """Tests updating the amount of a transaction."""
         # first create a transaction with self.test_transaction as parent
         data = copy.deepcopy(VALID_CREATION_DATA[0])
         data["parent_transaction"] = str(self.test_transaction.id)
@@ -97,6 +98,7 @@ class TransactionAPITestCase(APITestCase):
                 self.assertNotEqual(getattr(self.test_transaction, key), value)
 
     def test_retrieve_transaction(self):
+        """Tests retrieving a transaction."""
         transaction_id = str(self.test_transaction.id)
         url = RETRIEVE_TRANSACTION_URL.format(transaction_id=transaction_id)
         response = self.client.get(url)
@@ -106,12 +108,14 @@ class TransactionAPITestCase(APITestCase):
         self.assertIn('total_amount', response.data) # transaction sum is stored as total_amount
 
     def test_retrieve_non_existent_transaction(self):
+        """Tests retrieving a non-existent transaction."""
         transaction_id = uuid.uuid4()
         url = RETRIEVE_TRANSACTION_URL.format(transaction_id=transaction_id)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_list_transactions_without_pagination(self):
+        """Tests listing all transactions without pagination."""
         url = LIST_TRANSACTION_URL + '?page_size=0'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -119,6 +123,7 @@ class TransactionAPITestCase(APITestCase):
         self.assertEqual(len(response.data), 1)  
     
     def test_list_transactions_with_pagination(self):
+        """Tests listing all transactions with pagination."""
         url = LIST_TRANSACTION_URL
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -127,6 +132,7 @@ class TransactionAPITestCase(APITestCase):
         self.assertEqual(len(response.data.get('results')), 1)
     
     def test_list_transactions_with_type_filter(self):
+        """Tests listing all transactions with a filter."""
         url = LIST_TRANSACTION_URL + '?transaction_type=Test transaction'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -135,11 +141,13 @@ class TransactionAPITestCase(APITestCase):
         self.assertEqual(len(response.data.get('results')), 1)
 
     def test_list_transactions_with_invalid_filter_key(self):
+        """Tests listing all transactions with an invalid filter key."""
         url = LIST_TRANSACTION_URL + '?invalid_filter=Test transaction'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_list_transaction_with_invalid_filter_value(self):
+        """Tests listing all transactions with an invalid filter value."""
         url = LIST_TRANSACTION_URL + '?transaction_type=Invalid transaction'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
