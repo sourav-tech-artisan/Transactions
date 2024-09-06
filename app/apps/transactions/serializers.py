@@ -44,26 +44,18 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
 class TransactionUpdateSerializer(serializers.ModelSerializer):
     amount = serializers.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)], required=False)
     transaction_type = serializers.CharField(max_length=50, required=False)
-    parent_transaction = serializers.PrimaryKeyRelatedField(queryset=TransactionRepository.get_all_queryset(), required=False)
 
     class Meta:
         model = TransactionRepository.get_model()
-        fields = ("amount", "transaction_type", "parent_transaction")
+        fields = ("amount", "transaction_type",)
 
     def validate(self, attrs):
         super().validate(attrs)
+        instance = self.context.get("instance")
         # check if the amount is being updated
         if "amount" in attrs:
-            # total amount is the same as amount for the initial transaction
-            attrs["total_amount"] = attrs["amount"]
-        instance = self.context.get("instance")
-        if "parent_transaction" in attrs:
-            # prevent updating parent transaction to itself
-            if instance.id == attrs.get("parent_transaction").id:
-                raise serializers.ValidationError("Parent transaction cannot be the same as the transaction")
-            # prevent updating parent transaction if the parent transaction is the same as the current parent transaction
-            if instance.parent_transaction == attrs.get("parent_transaction"):
-                attrs.pop("parent_transaction")
+            difference_in_amount = attrs["amount"] - instance.amount
+            attrs["total_amount"] = instance.total_amount + difference_in_amount
         return attrs
 
 class TransactionReadSerializer(DynamicFieldsSerializer):
