@@ -39,3 +39,23 @@ To run the project locally -
 poetry run python manage.py test app/apps/transactions/tests
 ```
 
+## Endpoints for transaction app
+```
+1. Create Transaction: POST /transactions/api/v1/transactions/
+    Sample Request Body: 
+        {
+            "amount": 200,
+            "transaction_type": "Food",
+            "parent_transaction": "55fe2cce-f903-4a20-8dec-4c489cd11b6e"
+        }
+2. Get Transaction by id: GET /transactions/api/v1/transactions/{transaction_id}/
+3. Get Transaction sum by id: GET /transactions/api/v1/transactions/{transaction_id}?fields=total_amount
+4. Get Transactions List: GET /transactions/api/v1/transactions/
+5. Get Transactions List by Type: GET /transactions/api/v1/transactions/?fields=id&transaction_type={transaction_type}
+6. Update Transaction: PATCH /transactions/api/v1/transactions/55fe2cce-f903-4a20-8dec-4c489cd11b6e/
+    Sample Request Body: 
+        {
+            "amount": 300
+        }
+```
+
